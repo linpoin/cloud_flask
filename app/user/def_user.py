@@ -250,8 +250,6 @@ def user_get_prize_f(lottery_method, shopping_area_en_name, user_id, phone):
         return {'code': 400, 'message': '號碼未被註冊'}, 400
 
 # 使用者獎品列表
-
-
 def user_get_all_prize_f(phone):
     # 取得user_id
     select_phone_q = f"select * from user.users where phone = '{phone}'"
@@ -292,8 +290,6 @@ def user_get_all_prize_f(phone):
         return {'code': 400, 'message': '無獲得獎品紀錄'}, 400
 
 # 使用者列表
-
-
 def get_user_list():
     select_user_q = 'select * from user.users'
     user_list = mysql_engine.execute(select_user_q)
