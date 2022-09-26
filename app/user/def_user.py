@@ -289,7 +289,6 @@ def user_get_all_prize_f(phone):
                                "prize": row['prize'], "describe": f"{row['prize']}_{row['shopping_area_en_name']}", "prize_id": row['prize_id']})
         return {"lottery_num_list": lottery_num_list, "prize_list": prize_list}, 200
     else:
-        print(123)
         return {'code': 400, 'message': '無獲得獎品紀錄'}, 400
 
 # 使用者列表
