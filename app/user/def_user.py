@@ -102,7 +102,7 @@ def user_data_f(phone, en_name, factor=None):
 
     else:
         return {'code': 400, 'message': '號碼未被註冊'}, 400
- 
+
 # 闖關
 def run_level_f(phone, shopping_area_en_name, shop_id):
     # 取得通關數

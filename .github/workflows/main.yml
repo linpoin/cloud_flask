@@ -37,7 +37,7 @@ jobs:
       - name: CD
         uses: appleboy/ssh-action@v0.1.5
         with:
-          host: ${{ secrets.HOST }}
+          host: ${{ secrets.HOST }} 
           username: ${{ secrets.USERNAME }}
           # PORT: ${{ secrets.PORT }}
           password: ${{ secrets.PASSWORD }}
