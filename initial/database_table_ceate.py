@@ -39,7 +39,7 @@ def run():
         "mysql+pymysql://{}:{}@{}:3306/User".format(sql_user, sql_password, sql_ip))
     Uesr_session = sqlalchemy.orm.Session(Uesr_engine)
     Uesr_session.execute(
-        'create table users( id serial not null primary key,name varchar(20) not null,password varchar(80) not null,phone varchar(20) not null,user_id varchar(20) not null,user_qrcode longblob not null);')
+        'create table users( id serial not null primary key,name varchar(20) not null,password varchar(80) not null, phone varchar(20) not null, user_id varchar(20) not null, address varchar(255), user_qrcode longblob not null);')
     Uesr_session.execute(
         'create table user_get_prize( id serial not null primary key, phone varchar(20) not null, shopping_area_en_name varchar(20) not null, prize varchar(80) not null, prize_id varchar(255) not null);')
     Uesr_session.execute(
