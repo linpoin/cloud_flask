@@ -1,0 +1,2 @@
+conda activate cloud_gen_flask
+pip freeze > requirements.txt
