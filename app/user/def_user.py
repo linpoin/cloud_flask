@@ -50,7 +50,7 @@ def usercreate(name, password, phone):
                 sql_cmd = f"INSERT INTO user.run_level_number (user_id{columns}) VALUES ('{user_id}'{zero})"
                 mysql_engine.execute(sql_cmd)
 
-                token = make_token(phone)
+                token = make_token(user_id, phone)
                 return {'code': 200, 'user_id': user_id, 'token': token, 'message': '已完成註冊'}, 200
     else:
         return {'code': 400, 'message': '電話已被註冊'}, 400
@@ -63,9 +63,9 @@ def user_login_f(phone, password):
     if have_phone != None:
         sql_password = have_phone['password']
         if bcrypt.check_password_hash(sql_password, str(password)):
-            token = make_token(phone)
             name = have_phone['name']
             user_id = have_phone['user_id']
+            token = make_token(user_id, phone)
             return {'code': 200, 'name': name, 'user_id': user_id, 'token': token, 'message': '登入成功'}, 200
         else:
             return {'code': 400, 'message': '密碼錯誤'}, 400
@@ -244,8 +244,6 @@ def user_get_prize_f(lottery_method, shopping_area_en_name, user_id, phone):
                     return {'code':200,'get':1,'prize':get_prize}
         else:
             return {'code':200,'get':0,'prize':'銘謝惠顧'}"""
-
-        return {'123': num}
     else:
         return {'code': 400, 'message': '號碼未被註冊'}, 400
 
@@ -273,7 +271,6 @@ def user_get_all_prize_f(phone):
         convert_prize_rule = convert_prize_rule.replace('/n', '\t')
         en_name = en_name['shopping_area_eg_name']
         # 抽獎券名稱
-        # name '{name}'
         select_lottery_num_q = f"select lottery_id from shoparea_{en_name}.lottery_user where user_id = '{user_id}'"
         lottery_num = mysql_engine.execute(select_lottery_num_q)
         lottery_num = execute_to_list(lottery_num)

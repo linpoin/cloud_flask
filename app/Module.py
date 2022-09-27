@@ -30,12 +30,13 @@ import shutil
 shopping_area_data_path = './shopping_area_data'  # 商圈資料暫存區
 
 # user_token產生
-def make_token(data):
+def make_token(user_id, phone):
     keys = 'mindnode'
     now = datetime.utcnow()
     expiretime = timedelta(days=3)
     payload = {
-        'phone': data,
+        'user_id': user_id,
+        'phone': phone,
         'exp': now + expiretime,
     }
     return jwt.encode(payload, keys, algorithm='HS256')
