@@ -34,7 +34,9 @@ def admin_current_info():
         token = request.headers.get('Authorize')
         if token == None:
             return {'code': 401, 'message': '無附帶token'}, 401
-        else:
+        else: 
+            token_data = decode_token(token)
+            print(token_data)
             try:
                 token_data = decode_token(token)
                 account = token_data['account']
