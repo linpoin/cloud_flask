@@ -83,7 +83,7 @@ def user_info_f(user_id):
     else:
         return {'code': 401, 'message': '無此user_id'}, 401
 
-# 使用者資料
+# 使用者資料 
 def user_data_f(phone, en_name, factor=None):
     select_phone_q = f"select * from user.users where phone = '{phone}'"
     have_phone = mysql_engine.execute(select_phone_q).fetchone()
