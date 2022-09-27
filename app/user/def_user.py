@@ -84,15 +84,13 @@ def user_info_f(user_id):
         return {'code': 401, 'message': '無此user_id'}, 401
 
 # 使用者資料 
-def user_data_f(phone, en_name, factor=None):
-    select_phone_q = f"select * from user.users where phone = '{phone}'"
-    have_phone = mysql_engine.execute(select_phone_q).fetchone()
-    if have_phone != None:
-
+def user_data_f(user_id, en_name, factor=None):
+    select_user_id_q = f"select * from user.users where user_id = '{user_id}'"
+    have_user_id = mysql_engine.execute(select_user_id_q).fetchone()
+    if have_user_id != None:
         if factor == 'home':
-            name = have_phone['name']
-            user_id = have_phone['user_id']
-            user_qrcode = have_phone['user_qrcode'].decode('utf-8')
+            name = have_user_id['name']
+            user_qrcode = have_user_id['user_qrcode'].decode('utf-8')
         
         elif factor == 'lottery':  # 能否闖關
             select_user_q = f"select * from shoparea_{en_name}.lottery_user where user_id = '{user_id}'"

@@ -73,9 +73,9 @@ def user_data_factor(en_name, factor):
             return {'code': 401, 'message': '無附帶token'}
         if 'Authorize' in request.headers:
             try:
-                phone = jwt.decode(token, 'mindnode',
-                                   algorithms=['HS256'])['phone']
-                return_me = user_data_f(phone, en_name, factor)
+                user_id = jwt.decode(token, 'mindnode',
+                                   algorithms=['HS256'])['user_id']
+                return_me = user_data_f(user_id, en_name, factor)
                 return return_me
             except:
                 return {'code': 401, 'message': 'token已過期'}, 401
