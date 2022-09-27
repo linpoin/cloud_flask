@@ -14,7 +14,7 @@ def usercreate(name, password, phone):
             if have_user_id == None:
                 hashpassword = hash_password(password)
 
-                # 建立商圈logo暫存區 以利qrcode生成
+                # 建立商圈logo暫存區 以利qrcode生成 
                 if not os.path.isdir(shopping_area_data_path):
                     os.makedirs(shopping_area_data_path)
                 if not os.path.isdir(shopping_area_data_path + '/qrcode'):
