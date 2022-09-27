@@ -78,14 +78,13 @@ def user_data_f(phone, en_name, factor=None):
     select_phone_q = f"select * from user.users where phone = '{phone}'"
     have_phone = mysql_engine.execute(select_phone_q).fetchone()
     if have_phone != None:
-        name = have_phone['name']
-        user_id = have_phone['user_id']
-        user_qrcode = have_phone['user_qrcode'].decode('utf-8')
-        select_level_num_q = f"select {en_name}_num from user.run_level_number where user_id = '{user_id}'"
-        level_num = mysql_engine.execute(select_level_num_q).fetchone()
-        level_num = level_num[f'{en_name}_num']
+
+        if factor == 'home':
+            name = have_phone['name']
+            user_id = have_phone['user_id']
+            user_qrcode = have_phone['user_qrcode'].decode('utf-8')
         
-        if factor == 'lottery':
+        elif factor == 'lottery':  # 能否闖關
             select_user_q = f"select * from shoparea_{en_name}.lottery_user where user_id = '{user_id}'"
             select_repeat_pass_q = f"select * from shopping_area.shopping_area_infor where shopping_area_eg_name = '{en_name}'"
             repeat_pass = mysql_engine.execute(select_repeat_pass_q).fetchone()['repeat_pass']
@@ -94,9 +93,14 @@ def user_data_f(phone, en_name, factor=None):
                 return {'code': 200, factor: 1, 'message': '驗證成功'}, 200
             else:
                 return {'code': 200, factor: 0, 'message': '驗證成功'}, 200
+                
+        elif factor == 'level_num':  # 闖關次數
+            select_level_num_q = f"select {en_name}_num from user.run_level_number where user_id = '{user_id}'"
+            level_num = mysql_engine.execute(select_level_num_q).fetchone()
+            level_num = level_num[f'{en_name}_num']
         
-        if factor == None:
-            return {'code': 200, 'name': name, 'user_id': user_id, 'level_num': level_num, 'user_qrcode': user_qrcode, 'message': '驗證成功'}, 200
+        if factor == 'home': 
+            return {'code': 200, 'name': name, 'user_id': user_id, 'user_qrcode': user_qrcode, 'message': '驗證成功'}, 200
         else:
             return {'code': 200, factor: locals()[factor], 'message': '驗證成功'}, 200
 
