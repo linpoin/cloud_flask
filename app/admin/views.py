@@ -36,7 +36,6 @@ def admin_current_info():
             return {'code': 401, 'message': '無附帶token'}, 401
         else: 
             token_data = decode_token(token)
-            print(token_data)
             try:
                 token_data = decode_token(token)
                 account = token_data['account']
