@@ -17,7 +17,6 @@ def run():
         "mysql+pymysql://{}:{}@{}:3306".format(sql_user, sql_password, sql_ip))
     # 建立通道
     mysql_session = sqlalchemy.orm.Session(mysql_engine)
-
     # 建DataBase
     try:  # Uesr
         mysql_session.execute("CREATE DATABASE User")  # 建立database

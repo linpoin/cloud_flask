@@ -27,13 +27,12 @@ from MyQR import myqr
 import shutil
 import cryptocode
 from .hash_keys import *
-
+from .db_setting import *
 
 shopping_area_data_path = './shopping_area_data'  # 商圈資料暫存區
 
 # user_token產生
 def make_token(user_id, phone):
-    print(manage_key())
     key = manage_key()['key']
     now = datetime.utcnow()
     expiretime = timedelta(days=3)
@@ -61,6 +60,13 @@ def decode_token(token):
     key = manage_key()['key']
     return jwt.decode(token, key,
                 algorithms=['HS256'])
+
+# # 檢查token是否為最新
+# def token_is_new(token):
+#     user_id = decode_token(token)['user_id']
+#     mysql_engine.execute(
+#         "select token from "
+#     )
 
 # 敏感訊息加密(cryptocode)
 def hash_data(data):

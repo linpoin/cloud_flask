@@ -47,18 +47,17 @@ def user_login():
                      }
             return error, 400
 
-# 使用者資料
-@user.route('/<en_name>/data', methods=['GET'])
-def user_data(en_name):
+# 使用者詳細資訊
+@user.route('/info', methods=['GET'])
+def user_info():
     if request.method == 'GET':
         token = request.headers.get('Authorize')
         if token == None:
             return {'code': 401, 'message': '無附帶token'}
         if 'Authorize' in request.headers:
             try:
-                phone = jwt.decode(token, 'mindnode',
-                                   algorithms=['HS256'])['phone']
-                return_me = user_data_f(phone, en_name)
+                user_id = decode_token(token)['user_id']
+                return_me = user_info_f(user_id)
                 return return_me
             except:
                 return {'code': 401, 'message': 'token已過期'}, 401
