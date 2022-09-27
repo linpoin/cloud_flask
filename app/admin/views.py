@@ -42,7 +42,6 @@ def admin_current_info():
                 control = token_data['control']
                 select_admin_token_q = f"select token from shopping_area.admin_member where account = '{account}'"
                 sql_admin_token = mysql_engine.execute(select_admin_token_q).fetchone()['token']
-                print(sql_admin_token)
                 if sql_admin_token == token:
                     return_me = current_admin_info_f(account, control)
                     return return_me

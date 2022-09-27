@@ -166,7 +166,6 @@ def update_shopping_area_info_f(name, en_name, banner, welcome, activity_rule, c
         lottery_level_num = '{lottery_level_num}'\
         WHERE \
         shopping_area_eg_name = '{en_name}'"
-    print(banner)
     mysql_engine.execute(update_shopping_info_q)
     return {'message': '修改完成'}, 200
 

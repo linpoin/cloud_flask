@@ -43,7 +43,6 @@ def usercreate(name, password, phone):
                 area_list = list(df['Field'].tolist()[2:])
                 columns = ''
                 zero = ''
-                print(area_list, len(area_list))
                 for num in range(len(area_list)):
                     columns += f',{area_list[num]}'
                     zero += ",'0'"
@@ -72,6 +71,17 @@ def user_login_f(phone, password):
     else:
         return {'code': 400, 'message': '號碼未被註冊'}, 400
 
+# 使用者詳細資訊
+def user_info_f(user_id):
+    select_user_q = f"select * from user.users where user_id = {user_id}"
+    user_info = mysql_engine.execute(select_user_q).fetchone()
+    if user_info != None:
+        name = user_info['name']
+        phone = user_info['phone']
+        address = user_info['address']
+        return {'code': 200, 'name': name, 'phone': phone, 'address': address, 'message': '驗證成功'}, 200
+    else:
+        return {'code': 401, 'message': '無此user_id'}, 401
 
 # 使用者資料
 def user_data_f(phone, en_name, factor=None):
@@ -93,7 +103,7 @@ def user_data_f(phone, en_name, factor=None):
                 return {'code': 200, factor: 1, 'message': '驗證成功'}, 200
             else:
                 return {'code': 200, factor: 0, 'message': '驗證成功'}, 200
-                
+
         elif factor == 'level_num':  # 闖關次數
             select_level_num_q = f"select {en_name}_num from user.run_level_number where user_id = '{user_id}'"
             level_num = mysql_engine.execute(select_level_num_q).fetchone()
