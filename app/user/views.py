@@ -193,3 +193,19 @@ def user_prize_redeem():
                      'message': '請確認body或Token',
                      }
             return error, 400
+
+# 使用者編輯個人資訊
+@user.route('/update/info', methods=['PUT'])
+def user_update_info():
+    if request.method == 'PUT':
+        body_json = request.get_json()
+        if 'name' in body_json.keys() and 'phone' in body_json.keys() and 'address' in body_json.keys() and 'Authorize' in request.headers:
+            token = request.headers.get('Authorize')
+            user_id = decode_token(token)['user_id']
+
+            name = body_json['name']
+            phone = body_json['phone']
+            address = body_json['address']
+
+            return_me = update_user_info_f(user_id, name, phone, address)
+            return return_me

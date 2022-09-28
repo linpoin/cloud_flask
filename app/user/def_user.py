@@ -328,3 +328,15 @@ def user_prize_redeem_f(prize_id, user_id, address):
         return {'code': 200, 'message': f'已完成兌換獎品，寄送住址為{address}'}, 200
     else:
         return {'code': 400, 'message': '此商品已兌換過'}, 400
+
+# 編輯使用者資訊
+def update_user_info_f(user_id, name, phone, address):
+    have_user_id = f"select user_id from user.users where user_id = '{user_id}' limit 1"  # 搜尋是否有此筆資料
+    have_user = mysql_engine.execute(have_user_id).fetchone()
+    if have_user != None:
+        mysql_engine.execute(  # 更新資訊
+            f"update user.users set name = '{name}', phone = '{phone}', address = '{address}'"
+        )
+        return {'code': 200, 'message': '更新完成'}, 200
+    else:
+        return {'code': 400, 'message': '此使用者不存在'}, 400
