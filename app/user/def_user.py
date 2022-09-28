@@ -334,9 +334,12 @@ def update_user_info_f(user_id, name, phone, address):
     have_user_id = f"select user_id from user.users where user_id = '{user_id}' limit 1"  # 搜尋是否有此筆資料
     have_user = mysql_engine.execute(have_user_id).fetchone()
     if have_user != None:
-        have_phone_q = f"select phone from user.users where phone = '{phone}' limit 1"  # 搜尋是否有此筆資料
-        have_phone = mysql_engine.execute(have_phone_q).fetchone()
-        if have_phone == None:  # 資料庫中無此電話被註冊 故可使用
+        have_phone_q = f"select user_id from user.users where phone = '{phone}' limit 1"  # 搜尋是否有此筆資料
+        have_phone_user_id = mysql_engine.execute(have_phone_q).fetchone()['user_id']
+        if have_phone_user_id == None or have_phone_user_id == user_id:  # 資料庫中無此電話被註冊 故可使用
+
+            address = hash_data(address)  # 加密住址
+
             mysql_engine.execute(  # 更新資訊
                 f"update user.users set name = '{name}', phone = '{phone}', address = '{address}' where user_id = '{user_id}'"
             )
