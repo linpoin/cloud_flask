@@ -80,7 +80,8 @@ def user_info_f(user_id):
         name = user_info['name']
         phone = user_info['phone']
         address = user_info['address']
-        address = decode_data(address)  # 解密住址資料
+        if address != None:
+            address = decode_data(address)  # 解密住址資料
 
         return {'code': 200, 'name': name, 'phone': phone, 'address': address, 'message': '驗證成功'}, 200
     else:
