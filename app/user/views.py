@@ -171,5 +171,25 @@ def user_prize():
 @user.route('/list', methods=['GET'])
 def user_list():
     if request.method == 'GET':
-            return_me = get_user_list()
+            return_me = get_user_list_f()
             return return_me
+
+# 使用者兌換獎品(user提供住址)
+@user.route('/prize/redeem', methods=['POST'])
+def user_prize_redeem():
+    if request.method == 'POST':
+        body_json = request.get_json()
+        if 'prize_id' in body_json.keys() and 'address' in body_json.keys()  and 'Authorize' in request.headers:
+            token = request.headers.get('Authorize')
+            user_id = decode_token(token)['user_id']
+
+            prize_id = body_json['prize_id']
+            address = body_json['address']
+
+            return_me = user_prize_redeem_f(prize_id, user_id, address)
+            return return_me
+        else:
+            error = {'code': 400,
+                     'message': '請確認body或Token',
+                     }
+            return error, 400
