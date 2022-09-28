@@ -1,3 +1,4 @@
+from select import select
 from ..Module import *
 from ..db_setting import *
 
@@ -79,6 +80,8 @@ def user_info_f(user_id):
         name = user_info['name']
         phone = user_info['phone']
         address = user_info['address']
+        address = decode_data(address)  # 解密住址資料
+
         return {'code': 200, 'name': name, 'phone': phone, 'address': address, 'message': '驗證成功'}, 200
     else:
         return {'code': 401, 'message': '無此user_id'}, 401
@@ -226,7 +229,7 @@ def user_get_prize_f(lottery_method, shopping_area_en_name, user_id, phone):
                             select_prize_id = mysql_engine.execute(
                                 select_prize_id_q).fetchone()
                             if select_prize_id == None:
-                                sql_cmd = f"INSERT INTO user.user_get_prize (phone, shopping_area_en_name, prize, prize_id, redeem) VALUES ('{phone}','{shopping_area_en_name}','{get_prize}','{prize_id}', '{0}')"
+                                sql_cmd = f"INSERT INTO user.user_get_prize (user_id, shopping_area_en_name, prize, prize_id, redeem) VALUES ('{user_id}','{shopping_area_en_name}','{get_prize}','{prize_id}', '{0}')"
                                 mysql_engine.execute(sql_cmd)
                                 return {'code': 200, 'get': 1, 'prize': get_prize}
                     else:
@@ -266,7 +269,7 @@ def user_get_all_prize_f(phone):
     have_phone = mysql_engine.execute(select_phone_q).fetchone()
     user_id = have_phone['user_id']
 
-    select_phone_q = f"select * from user.user_get_prize where phone = '{phone}'"
+    select_phone_q = f"select * from user.user_get_prize where user_id = '{user_id}'"
     have_phone = mysql_engine.execute(select_phone_q)
     prize_list = []
 
@@ -299,7 +302,7 @@ def user_get_all_prize_f(phone):
         return {'code': 400, 'message': '無獲得獎品紀錄'}, 400
 
 # 使用者列表
-def get_user_list():
+def get_user_list_f():
     select_user_q = 'select * from user.users'
     user_list = mysql_engine.execute(select_user_q)
     user_list = execute_to_list(user_list)
@@ -308,3 +311,19 @@ def get_user_list():
         user['user_qrcode'] = user['user_qrcode'].decode('utf-8')
         _user_list.append(user)
     return jsonify(_user_list)
+
+# 使用者兌換獎品(user提供住址)
+def user_prize_redeem_f(prize_id, user_id, address):
+    select_redeem = f"select redeem from user.user_get_prize where user_id = '{user_id}' and prize_id = '{prize_id}'"
+    redeem = mysql_engine.execute(select_redeem).fetchone()['redeem']
+    if redeem == 0:
+        update_redeem = f"UPDATE user.user_get_prize SET redeem = '{1}'  WHERE user_id = '{user_id}' AND prize_id = '{prize_id}'"
+        mysql_engine.execute(update_redeem)  # 更新兌換過狀態
+
+        hash_address = hash_data(address)  # 將住址資訊加密
+        mysql_engine.execute(  # 新增寄送資料到 user.user_redeemed_prize
+            f"INSERT INTO user.user_redeemed_prize (user_id, prize_id, address, delivery) VALUES ('{user_id}', '{prize_id}', '{hash_address}', '{0}')"
+        )
+        return {'code': 200, 'message': f'已完成兌換獎品，寄送住址為{address}'}, 200
+    else:
+        return {'code': 400, 'message': '此商品已兌換過'}, 400
