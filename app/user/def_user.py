@@ -336,7 +336,7 @@ def update_user_info_f(user_id, name, phone, address):
     if have_user != None:
         have_phone_q = f"select user_id from user.users where phone = '{phone}' limit 1"  # 搜尋是否有此筆資料
         have_phone_user_id = mysql_engine.execute(have_phone_q).fetchone()['user_id']
-        if have_phone_user_id == None or have_phone_user_id == user_id:  # 資料庫中無此電話被註冊 故可使用
+        if have_phone_user_id == None or str(have_phone_user_id) == str(user_id):  # 資料庫中無此電話被註冊 故可使用
 
             address = hash_data(address)  # 加密住址
 
