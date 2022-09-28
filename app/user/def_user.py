@@ -335,7 +335,7 @@ def update_user_info_f(user_id, name, phone, address):
     have_user = mysql_engine.execute(have_user_id).fetchone()
     if have_user != None:
         mysql_engine.execute(  # 更新資訊
-            f"update user.users set name = '{name}', phone = '{phone}', address = '{address}'"
+            f"update user.users set name = '{name}', phone = '{phone}', address = '{address}' where user_id = '{user_id}'"
         )
         return {'code': 200, 'message': '更新完成'}, 200
     else:
