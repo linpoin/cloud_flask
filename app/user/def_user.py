@@ -287,7 +287,7 @@ def user_get_all_prize_f(phone):
         convert_prize_rule = convert_prize_rule.replace('/n', '\t')
         en_name = en_name['shopping_area_eg_name']
         # 抽獎券名稱
-        select_lottery_num_q = f"select lottery_id from shoparea_{en_name}.lottery_user where user_id = '{user_id}'"
+        select_lottery_num_q = f"select lottery_id from shoparea_{en_name}.user_lottery where user_id = '{user_id}'"
         lottery_num = mysql_engine.execute(select_lottery_num_q)
         lottery_num = execute_to_list(lottery_num)
         for i in lottery_num:

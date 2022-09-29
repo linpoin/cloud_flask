@@ -22,7 +22,9 @@ def shopping_area_create(name, eg_name, logo, banner, welcome, activity_rule, co
         'create table run_level( id serial not null primary key, user_id varchar(20) not null, shop_id varchar(80) not null);')
         if lottery_method == '0':
             globals()[f'{eg_name}_engine'].execute(
-                'create table lottery_user( id serial not null primary key, user_name varchar(20) not null, user_id varchar(20) not null, lottery_id varchar(20) not null);')
+                'create table user_lottery( id serial not null primary key, user_id varchar(20) not null, lottery_id varchar(20) not null);')
+            globals()[f'{eg_name}_engine'].execute(
+                'create table lottery_num( id serial not null primary key, user_id varchar(20) not null, lottery_num INT(20) not null);')
         elif lottery_method == '1':
             globals()[f'{eg_name}_engine'].execute(
                 'create table prize( id serial not null primary key, prize varchar(80) not null, prize_probability INT(20) not null, all_quantity INT(20) not null, last_quantity INT(20) not null);')
