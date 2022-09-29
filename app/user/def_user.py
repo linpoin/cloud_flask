@@ -310,7 +310,8 @@ def get_user_list_f():
     _user_list = []
     for user in user_list:
         user['user_qrcode'] = user['user_qrcode'].decode('utf-8')
-        user['address'] = decode_data(user['address'])
+        if user['address'] != None:
+            user['address'] = decode_data(user['address'])
         _user_list.append(user)
     return jsonify(_user_list)
 
