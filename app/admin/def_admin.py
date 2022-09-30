@@ -68,12 +68,23 @@ def user_redeem_f(en_name, name, user_id, repeat_pass, level_num):
 def user_redeem_list_f(en_name):
     lottery_method_q = f"select lottery_method from shopping_area.shopping_area_infor where shopping_area_eg_name = '{en_name}'"
     lottery_method = mysql_engine.execute(lottery_method_q).fetchone()['lottery_method']
-    if lottery_method == 0:
+
+    if lottery_method == 0:  # 實體抽獎
+        lottert_dict = []
         select_lottery_q = f"select lottery_id,user_id from shoparea_{en_name}.user_lottery"
         select_lottery_list = mysql_engine.execute(select_lottery_q)
-    elif lottery_method == 1:
-        pass
-    return jsonify(execute_to_list(select_lottery_list))
+        for lottery in execute_to_list(select_lottery_list):  # 加入地址
+            select_address_q = f"select address from user.users where user_id = '{lottery['user_id']}'"
+            address = mysql_engine.execute(select_address_q).fetchone()['address']
+            lottery['address'] = address
+            lottery['prize_id'] = lottery.pop('lottery_id')
+            lottert_dict.append(lottery)
+        return jsonify(lottert_dict)
+
+    elif lottery_method == 1:  # 線上抽獎
+        select_reddemed_q = f"select * from shoparea_{en_name}.user_redeemed_prize"
+        select_reddemed_list = mysql_engine.execute(select_reddemed_q)
+        return jsonify(execute_to_list(select_reddemed_list))
     
 # 刪除商圈
 def remove_shoparea_f(en_name):
