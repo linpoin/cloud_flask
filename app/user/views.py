@@ -135,17 +135,20 @@ def user_get_prize(en_name):
                 lottery_method = lottery_level_num['lottery_method']
                 repeat_pass = lottery_level_num['repeat_pass']
                 lottery_level_num = lottery_level_num['lottery_level_num']
-                if level_num >= int(lottery_level_num):
-                    if repeat_pass == 1:
-                        level_num = 0
-                        level_up_q = f"UPDATE user.run_level_number SET {en_name}_num = '{level_num}'  WHERE user_id = '{user_id}'"
-                        mysql_engine.execute(level_up_q)
+                if lottery_method == 1:
+                    if level_num >= int(lottery_level_num):
+                        if repeat_pass == 1:
+                            level_num = 0
+                            level_up_q = f"UPDATE user.run_level_number SET {en_name}_num = '{level_num}'  WHERE user_id = '{user_id}'"
+                            mysql_engine.execute(level_up_q)
 
-                    return_me = user_get_prize_f(
-                        lottery_method, en_name, user_id, phone)
-                    return return_me
-                else:
-                    return {'code': 403, 'message': '闖關未達5關'}, 403
+                        return_me = user_get_prize_f(
+                            lottery_method, en_name, user_id, phone)
+                        return return_me
+                    else:
+                        return {'code': 403, 'message': '闖關未達5關'}, 403
+                elif lottery_method == 0:
+                    return {'code': 400, 'message': '請至核銷專區'}
             except:
                 return {'code': 401, 'message': 'token已過期'}, 401
 
