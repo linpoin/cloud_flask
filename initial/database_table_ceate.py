@@ -40,13 +40,9 @@ def run():
     Uesr_session.execute(
         'create table users( id serial not null primary key,name varchar(20) not null,password varchar(80) not null, phone varchar(20) not null, user_id varchar(20) not null, address varchar(255), user_qrcode longblob not null);')
     Uesr_session.execute(
-        'create table user_get_prize( id serial not null primary key, user_id varchar(20) not null, shopping_area_en_name varchar(20) not null, prize varchar(80) not null, prize_id varchar(255) not null, redeem INT(10) not null);')
-    Uesr_session.execute(
         'create table run_level( id serial not null primary key, user_id varchar(20) not null, shop_id varchar(80) not null);')
     Uesr_session.execute(
         'create table run_level_number( id serial not null primary key, user_id varchar(20) not null);')
-    Uesr_session.execute(
-        'create table user_redeemed_prize( id serial not null primary key, user_id varchar(20) not null, prize_id varchar(255) not null, address varchar(255) not null, delivery INT(10) not null);')
 
     # 建立商圈管理相關Table
     admin_engine = create_engine(
