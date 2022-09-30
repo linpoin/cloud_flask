@@ -57,6 +57,6 @@ def run():
     bcrypt = Bcrypt()
     hashed_password = bcrypt.generate_password_hash(password=root_password).decode()
     #創建管理者帳號
-    admin_session.execute(
-        f"INSERT INTO admin_member (account, password, control) VALUES ('{root_id}','{hashed_password}','{0}')"
+    mysql_engine.execute(
+        f"INSERT INTO shopping_area.admin_member (account, password, control) VALUES ('{root_id}','{hashed_password}','0')"
     )
