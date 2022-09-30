@@ -158,9 +158,9 @@ def user_prize():
             return {'code': 401, 'message': '無附帶token'},401
         if 'Authorize' in request.headers:
             try:
-                phone = jwt.decode(token, 'mindnode',
-                                   algorithms=['HS256'])['phone']
-                return_me = user_get_all_prize_f(phone)
+                user_id = jwt.decode(token, 'mindnode',
+                                   algorithms=['HS256'])['user_id']
+                return_me = user_get_all_prize_f(user_id)
                 return return_me
             except:
                 return {'code': 401, 'message': 'token已過期'}, 401
@@ -179,14 +179,15 @@ def user_list():
 def user_prize_redeem():
     if request.method == 'POST':
         body_json = request.get_json()
-        if 'prize_id' in body_json.keys() and 'address' in body_json.keys()  and 'Authorize' in request.headers:
+        if 'prize_id' in body_json.keys() and 'address' in body_json.keys() and 'en_name' in body_json.keys() and 'Authorize' in request.headers:
             token = request.headers.get('Authorize')
             user_id = decode_token(token)['user_id']
 
             prize_id = body_json['prize_id']
             address = body_json['address']
+            en_name = body_json['en_name']
 
-            return_me = user_prize_redeem_f(prize_id, user_id, address)
+            return_me = user_prize_redeem_f(en_name, prize_id, user_id, address)
             return return_me
         else:
             error = {'code': 400,

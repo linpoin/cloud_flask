@@ -28,8 +28,14 @@ def shopping_area_create(name, eg_name, logo, banner, welcome, activity_rule, co
         elif lottery_method == '1':
             globals()[f'{eg_name}_engine'].execute(
                 'create table prize( id serial not null primary key, prize varchar(80) not null, prize_probability INT(20) not null, all_quantity INT(20) not null, last_quantity INT(20) not null);')
+            # globals()[f'{eg_name}_engine'].execute(
+            #     'create table lottery_user( id serial not null primary key, user_id varchar(20) not null, lottery_num INT(20) not null);')
             globals()[f'{eg_name}_engine'].execute(
-                'create table lottery_user( id serial not null primary key, user_id varchar(20) not null, lottery_num INT(20) not null);')
+                'create table user_prize( id serial not null primary key, user_id varchar(20) not null, prize varchar(80) not null, prize_id varchar(20) not null, redeem INT(10) not null);')
+            globals()[f'{eg_name}_engine'].execute(
+                'create table lottery_num( id serial not null primary key, user_id varchar(20) not null, lottery_num INT(20) not null);')
+            globals()[f'{eg_name}_engine'].execute(
+                'create table user_redeemed_prize( id serial not null primary key, user_id varchar(20) not null, prize_id varchar(255) not null, address varchar(255) not null, delivery INT(10) not null);')
             # 植入獎品至獎品資料庫
             all_probability = 100
             for prizes in prize_list:
