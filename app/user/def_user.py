@@ -97,7 +97,7 @@ def user_data_f(user_id, en_name, factor=None):
             user_qrcode = have_user_id['user_qrcode'].decode('utf-8')
         
         elif factor == 'lottery':  # 能否闖關
-            select_user_q = f"select * from shoparea_{en_name}.lottery_user where user_id = '{user_id}'"
+            select_user_q = f"select * from shoparea_{en_name}.lottery_num where user_id = '{user_id}'"
             select_repeat_pass_q = f"select * from shopping_area.shopping_area_infor where shopping_area_eg_name = '{en_name}'"
             repeat_pass = mysql_engine.execute(select_repeat_pass_q).fetchone()['repeat_pass']
             lottery_user = mysql_engine.execute(select_user_q).fetchone()
@@ -235,31 +235,6 @@ def user_get_prize_f(lottery_method, shopping_area_en_name, user_id, phone):
                                 return {'code': 200, 'get': 1, 'prize': get_prize}
                     else:
                         return {'code': 200, 'get': 0, 'prize': '銘謝惠顧'}
-
-        """if num < 7:
-            get_prize = prize_list[random.randint(0,len(prize_list))]
-            select_prize_q = "select * from prize where prize = '{}'".format(get_prize)
-            select_prize = db.engine.execute(select_prize_q).fetchone()
-            prize_num = select_prize['all_quantity']
-            prize_num = int(prize_num) - 1
-            last_num = 40 - prize_num
-            
-            level_up_q = "UPDATE prize SET all_quantity = '{}'  WHERE prize = '{}'".format(prize_num,get_prize)
-            db.engine.execute(level_up_q)
-            level_up_q = "UPDATE prize SET last_quantity = '{}'  WHERE prize = '{}'".format(last_num,get_prize)
-            db.engine.execute(level_up_q)
-            
-            while(True):
-                prize_id = random.randint(100000,999999)
-                prize_id = 'SL' + str(prize_id)                
-                select_prize_id_q = "select prize_id from user_get_prize where prize_id = '{}'".format(prize_id)
-                select_prize_id = db.engine.execute(select_prize_id_q).fetchone()
-                if select_prize_id == None:
-                    sql_cmd = "INSERT INTO user_get_prize (phone, prize, prize_id) VALUES ('{}','{}','{}')".format(phone,get_prize,prize_id)
-                    db.engine.execute(sql_cmd)
-                    return {'code':200,'get':1,'prize':get_prize}
-        else:
-            return {'code':200,'get':0,'prize':'銘謝惠顧'}"""
     else:
         return {'code': 400, 'message': '號碼未被註冊'}, 400
 
