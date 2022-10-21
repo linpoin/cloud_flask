@@ -1,0 +1,32 @@
+name: CD
+
+# Controls when the workflow will run
+on:
+  workflow_run:
+    workflows: [ CI ]
+    types:
+      - completed
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: CD
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.HOST }} 
+          username: ${{ secrets.USERNAME }}
+          # PORT: ${{ secrets.PORT }}
+          password: ${{ secrets.PASSWORD }}
+          # key: ${{ secrets.SSHKEY }}
+          # passphrase: ${{ secrets.SERVER_PASSPHRASE }}
+          script: | 
+            github_CloudFlask_CD.bat
