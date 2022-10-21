@@ -74,9 +74,12 @@ def user_redeem_list_f(en_name):
         select_lottery_q = f"select lottery_id,user_id from shoparea_{en_name}.user_lottery"
         select_lottery_list = mysql_engine.execute(select_lottery_q)
         for lottery in execute_to_list(select_lottery_list):  # 加入地址
-            select_address_q = f"select address from user.users where user_id = '{lottery['user_id']}'"
-            address = mysql_engine.execute(select_address_q).fetchone()['address']
+            select_user_q = f"select name, address from user.users where user_id = '{lottery['user_id']}'"
+            user_info = mysql_engine.execute(select_user_q).fetchone()
+            address = user_info['address']
+            name = user_info['name']
             lottery['address'] = address
+            lottery['name'] = name
             lottery['prize_id'] = lottery.pop('lottery_id')
             lottert_dict.append(lottery)
         return jsonify(lottert_dict)
