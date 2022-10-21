@@ -1,11 +1,12 @@
 # This is a basic workflow to help you get started with Actions
 
 name: CI
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
-  push:
-    branches: [ "master", "Develop" ]
+  pull_request:
+    branches: [ "Develop" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -31,3 +32,14 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+      - name: CD
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.HOST }} 
+          username: ${{ secrets.USERNAME }}
+          # PORT: ${{ secrets.PORT }}
+          password: ${{ secrets.PASSWORD }}
+          # key: ${{ secrets.SSHKEY }}
+          # passphrase: ${{ secrets.SERVER_PASSPHRASE }}
+          script: | 
+            github_CloudFlask_CD.bat
