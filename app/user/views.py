@@ -64,6 +64,17 @@ def user_info():
         else:
             return {'code': 401, 'message': '無附帶token', '123': request.headers}, 401
 
+
+# "單一"使用者詳細資訊
+@user.route('/info/<user_id>', methods=['GET'])
+def oneuser_info(user_id):
+    if request.method == 'GET':
+        try:
+            return_me = user_info_f(user_id)
+            return return_me
+        except:
+            return {'code': 401, 'message': '未知錯誤'}, 401
+
 # 使用者資料(指定因子)
 @user.route('/<en_name>/data/<factor>', methods=['GET'])
 def user_data_factor(en_name, factor):
