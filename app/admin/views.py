@@ -100,7 +100,7 @@ def admin_redeem(en_name):
                 select_lottery_level_num_q).fetchone()
             repeat_pass = lottery_level_num['repeat_pass']
             lottery_level_num = lottery_level_num['lottery_level_num']
-
+            print(name, level_num)
             if level_num >= int(lottery_level_num):
                 return_me = user_redeem_f(
                     en_name, name, user_id, repeat_pass, level_num)
