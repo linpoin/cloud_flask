@@ -282,9 +282,7 @@ def user_get_all_prize_f(user_id):
                                      "shop_name": f'{name}',"shop_en_name": f'{en_name}', "prize": i['prize'],
                                       "describe": f"{convert_prize_rule}", "prize_id": i['prize_id'], "redeem": i['redeem']})
 
-        return {"lottery_num_list": lottery_num_list, "prize_list": prize_list}, 200
-    else:
-        return {'code': 400, 'message': '無獲得獎品紀錄'}, 400
+    return {"lottery_num_list": lottery_num_list, "prize_list": prize_list}, 200
 
 # 使用者列表
 def get_user_list_f():
