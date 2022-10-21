@@ -17,7 +17,6 @@ def run():
         "mysql+pymysql://{}:{}@{}:3306".format(sql_user, sql_password, sql_ip))
     # 建立通道
     mysql_session = sqlalchemy.orm.Session(mysql_engine)
-
     # 建DataBase
     try:  # Uesr
         mysql_session.execute("CREATE DATABASE User")  # 建立database
@@ -39,9 +38,7 @@ def run():
         "mysql+pymysql://{}:{}@{}:3306/User".format(sql_user, sql_password, sql_ip))
     Uesr_session = sqlalchemy.orm.Session(Uesr_engine)
     Uesr_session.execute(
-        'create table users( id serial not null primary key,name varchar(20) not null,password varchar(80) not null,phone varchar(20) not null,user_id varchar(20) not null,user_qrcode longblob not null);')
-    Uesr_session.execute(
-        'create table user_get_prize( id serial not null primary key, phone varchar(20) not null, shopping_area_en_name varchar(20) not null, prize varchar(80) not null, prize_id varchar(255) not null);')
+        'create table users( id serial not null primary key,name varchar(20) not null,password varchar(80) not null, phone varchar(20) not null, user_id varchar(20) not null, address varchar(255), user_qrcode longblob not null);')
     Uesr_session.execute(
         'create table run_level( id serial not null primary key, user_id varchar(20) not null, shop_id varchar(80) not null);')
     Uesr_session.execute(
@@ -60,6 +57,6 @@ def run():
     bcrypt = Bcrypt()
     hashed_password = bcrypt.generate_password_hash(password=root_password).decode()
     #創建管理者帳號
-    admin_session.execute(
-        f"INSERT INTO admin_member (account, password, control) VALUES ('{root_id}','{hashed_password}','{0}')"
+    mysql_engine.execute(
+        f"INSERT INTO shopping_area.admin_member (account, password, control) VALUES ('{root_id}','{hashed_password}','0')"
     )

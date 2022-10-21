@@ -25,24 +25,27 @@ import string
 import os
 from MyQR import myqr
 import shutil
-
+import cryptocode
+from .hash_keys import *
+from .db_setting import *
 
 shopping_area_data_path = './shopping_area_data'  # 商圈資料暫存區
 
 # user_token產生
-def make_token(data):
-    keys = 'mindnode'
+def make_token(user_id, phone):
+    key = manage_key()['key']
     now = datetime.utcnow()
     expiretime = timedelta(days=3)
     payload = {
-        'phone': data,
+        'user_id': user_id,
+        'phone': phone,
         'exp': now + expiretime,
     }
-    return jwt.encode(payload, keys, algorithm='HS256')
+    return jwt.encode(payload, key, algorithm='HS256')
 
 # admin_token產生
 def admin_make_token(account, control):
-    keys = 'mindnode'
+    key = manage_key()['key']
     now = datetime.utcnow()
     expiretime = timedelta(days=3)
     payload = {
@@ -50,12 +53,32 @@ def admin_make_token(account, control):
         'control': control,
         'exp': now + expiretime,
     }
-    return jwt.encode(payload, keys, algorithm='HS256')
+    return jwt.encode(payload, key, algorithm='HS256')
 
 # token解析
 def decode_token(token):
-    return jwt.decode(token, 'mindnode',
+    key = manage_key()['key']
+    return jwt.decode(token, key,
                 algorithms=['HS256'])
+
+# # 檢查token是否為最新
+# def token_is_new(token):
+#     user_id = decode_token(token)['user_id']
+#     mysql_engine.execute(
+#         "select token from "
+#     )
+
+# 敏感訊息加密(cryptocode)
+def hash_data(data):
+    key = manage_key()['key']
+    str_encoded = cryptocode.encrypt(data, key)
+    return str_encoded
+
+# 敏感訊息解密(cryptocode)
+def decode_data(data):
+    key = manage_key()['key']
+    str_decoded = cryptocode.decrypt(data, key)
+    return str_decoded
 
 # 密碼加密
 def hash_password(password):

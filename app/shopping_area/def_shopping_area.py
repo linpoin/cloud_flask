@@ -22,12 +22,18 @@ def shopping_area_create(name, eg_name, logo, banner, welcome, activity_rule, co
         'create table run_level( id serial not null primary key, user_id varchar(20) not null, shop_id varchar(80) not null);')
         if lottery_method == '0':
             globals()[f'{eg_name}_engine'].execute(
-                'create table lottery_user( id serial not null primary key, user_name varchar(20) not null, user_id varchar(20) not null, lottery_id varchar(20) not null);')
+                'create table user_lottery( id serial not null primary key, user_id varchar(20) not null, lottery_id varchar(20) not null);')
+            globals()[f'{eg_name}_engine'].execute(
+                'create table lottery_num( id serial not null primary key, user_id varchar(20) not null, lottery_num INT(20) not null);')
         elif lottery_method == '1':
             globals()[f'{eg_name}_engine'].execute(
                 'create table prize( id serial not null primary key, prize varchar(80) not null, prize_probability INT(20) not null, all_quantity INT(20) not null, last_quantity INT(20) not null);')
             globals()[f'{eg_name}_engine'].execute(
-                'create table lottery_user( id serial not null primary key, user_id varchar(20) not null, lottery_num INT(20) not null);')
+                'create table user_prize( id serial not null primary key, user_id varchar(20) not null, prize varchar(80) not null, prize_id varchar(20) not null, redeem INT(10) not null);')
+            globals()[f'{eg_name}_engine'].execute(
+                'create table lottery_num( id serial not null primary key, user_id varchar(20) not null, lottery_num INT(20) not null);')
+            globals()[f'{eg_name}_engine'].execute(
+                'create table user_redeemed_prize( id serial not null primary key, user_id varchar(20) not null, prize_id varchar(255) not null, address varchar(255) not null, delivery INT(10) not null);')
             # 植入獎品至獎品資料庫
             all_probability = 100
             for prizes in prize_list:
@@ -129,7 +135,6 @@ def select_shopping_area_info(shop_area_en_name):
             df['shop_qrcode'] = df['shop_qrcode'].map(
                 lambda x: x.decode('utf-8'))
             shop_list = df.to_dict(orient='records')
-            #shop_list = shopping_engine.execute(select_shop_list_q).mappings().all()
             rejson = {'shopping_area_name': shopping_area_name, 'shopping_area_eg_name': shopping_area_eg_name, 'shopping_logo': shopping_logo, 'shopping_banner': shopping_banner, 'welcome_html': welcome_text, 'activity_rule_html': activity_rule_html, 'convert_prize_rule_html': convert_prize_rule_html,
                       'activity_rule_text': activity_rule, 'convert_prize_rule_text': convert_prize_rule, 'lottery_level_num': lottery_level_num, 'lottery_method': lottery_method, 'repeat_pass': repeat_pass, 'verification_method': verification_method, 'shop_list': shop_list}
             return rejson
@@ -166,7 +171,6 @@ def update_shopping_area_info_f(name, en_name, banner, welcome, activity_rule, c
         lottery_level_num = '{lottery_level_num}'\
         WHERE \
         shopping_area_eg_name = '{en_name}'"
-    print(banner)
     mysql_engine.execute(update_shopping_info_q)
     return {'message': '修改完成'}, 200
 

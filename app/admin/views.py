@@ -34,14 +34,14 @@ def admin_current_info():
         token = request.headers.get('Authorize')
         if token == None:
             return {'code': 401, 'message': '無附帶token'}, 401
-        else:
+        else: 
+            token_data = decode_token(token)
             try:
                 token_data = decode_token(token)
                 account = token_data['account']
                 control = token_data['control']
                 select_admin_token_q = f"select token from shopping_area.admin_member where account = '{account}'"
                 sql_admin_token = mysql_engine.execute(select_admin_token_q).fetchone()['token']
-                print(sql_admin_token)
                 if sql_admin_token == token:
                     return_me = current_admin_info_f(account, control)
                     return return_me
@@ -100,7 +100,7 @@ def admin_redeem(en_name):
                 select_lottery_level_num_q).fetchone()
             repeat_pass = lottery_level_num['repeat_pass']
             lottery_level_num = lottery_level_num['lottery_level_num']
-
+            print(name, level_num)
             if level_num >= int(lottery_level_num):
                 return_me = user_redeem_f(
                     en_name, name, user_id, repeat_pass, level_num)
